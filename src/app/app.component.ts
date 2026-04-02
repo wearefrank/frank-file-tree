@@ -67,7 +67,7 @@ export class AppComponent {
     }
   }
 
-  protected pathComponentIndexesOfNodeToHide: string = '';
+  protected pathComponentIndexes: string = '';
 
   determineIcon(value: CreateTreeItem): string {
     return 'bi bi-1-circle-fill blue'
@@ -170,31 +170,25 @@ export class AppComponent {
     }, {childrenKey: 'checkpoints'})
   }
 
-  hideItem() {
-    for (let element of this.tree.elements) {
-      element.element.nativeElement.style.display = 'none'
-    }
-  }
-
   determineFont(item: CreateTreeItem): string {
     return 'red'
   }
 
-  hide() {
-    const pathComponentIndexes = this.pathComponentIndexesOfNodeToHide.split(',').map((s) => +s);
-    console.log(`Going to hide: ${pathComponentIndexes}`);
+  select() {
+    const pathComponentIndexes = this.pathComponentIndexes.split(',').map((s) => +s);
+    console.log(`Going to select: ${pathComponentIndexes}`);
     const from: FileTreeItem = this.tree.items[pathComponentIndexes[0]];
     const remainingIndexes: number[] = pathComponentIndexes.slice(1);
-    this.hidePath(from, remainingIndexes);
+    this.selectPath(from, remainingIndexes);
   }
 
-  private hidePath(from: FileTreeItem, indexes: number[]) {
+  private selectPath(from: FileTreeItem, indexes: number[]) {
     if (indexes.length === 0) {
-      from.visible = false;
+      from.currentlySelected = true;
     } else {
       const child = from.children![indexes[0]];
       const remainingIndexes = indexes.slice(1);
-      this.hidePath(child, remainingIndexes);
+      this.selectPath(child, remainingIndexes);
     }
   }
 }

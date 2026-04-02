@@ -1,7 +1,7 @@
 <div>
-  <label>Hide node (comma-separated indexes of path):</label>
-  <input [(ngModel)]="pathComponentIndexesOfNodeToHide">
-  <button (click)="hide()">Hide</button>
+  <label>Select node (comma-separated indexes of path):</label>
+  <input [(ngModel)]="pathComponentIndexes">
+  <button (click)="select()">Select</button>
 </div>
 
 <ng-simple-tree
