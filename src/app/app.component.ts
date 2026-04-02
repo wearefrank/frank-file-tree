@@ -3,16 +3,16 @@ import {NgSimpleFileTree} from "../../projects/ng-simple-file-tree/src/lib/ng-si
 import {FileTreeOptions} from "../../projects/ng-simple-file-tree/src/lib/models/file-tree-options";
 import {CreateTreeItem} from "../../projects/ng-simple-file-tree/src/lib/models/create-tree-item";
 import {FileTreeItem} from "../../projects/ng-simple-file-tree/src/lib/models/file-tree-item";
+import {FormsModule} from "@angular/forms";
 
 @Component({
     selector: 'app-root',
-    imports: [NgSimpleFileTree],
+    imports: [NgSimpleFileTree, FormsModule],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
 })
 export class AppComponent {
   @ViewChild('tree') tree!: NgSimpleFileTree;
-  title = 'simple-file-tree';
 
   treeItems = [
     {
@@ -66,6 +66,8 @@ export class AppComponent {
       all: 'font-family: consolas',
     }
   }
+
+  protected pathComponentIndexes: string = '';
 
   determineIcon(value: CreateTreeItem): string {
     return 'bi bi-1-circle-fill blue'
@@ -168,13 +170,25 @@ export class AppComponent {
     }, {childrenKey: 'checkpoints'})
   }
 
-  hideItem() {
-    for (let element of this.tree.elements) {
-      element.element.nativeElement.style.display = 'none'
-    }
-  }
-
   determineFont(item: CreateTreeItem): string {
     return 'red'
+  }
+
+  select() {
+    const pathComponentIndexes = this.pathComponentIndexes.split(',').map((s) => +s);
+    console.log(`Going to select: ${pathComponentIndexes}`);
+    const from: FileTreeItem = this.tree.items[pathComponentIndexes[0]];
+    const remainingIndexes: number[] = pathComponentIndexes.slice(1);
+    this.selectPath(from, remainingIndexes);
+  }
+
+  private selectPath(from: FileTreeItem, indexes: number[]) {
+    if (indexes.length === 0) {
+      from.currentlySelected = true;
+    } else {
+      const child = from.children![indexes[0]];
+      const remainingIndexes = indexes.slice(1);
+      this.selectPath(child, remainingIndexes);
+    }
   }
 }
