@@ -1,5 +1,5 @@
 {
-  "name": "frank-file-tree",
+  "name": "@wearefrank/frank-file-tree",
   "version": "2.0.0-SNAPSHOT",
   "scripts": {
     "ng": "ng",
